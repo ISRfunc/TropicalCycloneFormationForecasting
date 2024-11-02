@@ -1,0 +1,4 @@
+data:
+  root: "/media/baok/New Volume/UET/Trí tuệ nhân tạo/DATA_TC/DATA"
+  maxForecastTime: 36
+  weighted_inputNorm: True
