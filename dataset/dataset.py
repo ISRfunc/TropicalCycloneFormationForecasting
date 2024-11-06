@@ -21,8 +21,6 @@ class TropicalCycloneDataset(Dataset):
 
     def __getDataFromFile__(self, fileDir):
 
-        varDict = {}
-
         f = netCDF4.Dataset(self.dataRoot + '/' + fileDir)
         if self.fillOutlier:
             outlier_f = open("preprocessing/constants/outliers.txt", "r")

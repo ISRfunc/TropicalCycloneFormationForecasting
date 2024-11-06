@@ -67,7 +67,7 @@ def getMean(varIdx, fileNames, sampleIters = 10):
 
 
 
-def __getStd__(varIdx, fileNames, mean):
+def __getVariance__(varIdx, fileNames, mean):
 
     samples = np.asarray([])
 
@@ -89,12 +89,12 @@ def __getStd__(varIdx, fileNames, mean):
     return np.mean((samples - mean) ** 2 )
 
 
-def getStd(varIdx, fileNames, mean, sampleIters = 10):
+def getVariance(varIdx, fileNames, mean, sampleIters = 10):
     
     samples = []
 
     for i in range(sampleIters):
-        samples.append(__getStd__(varIdx, fileNames, mean))
+        samples.append(__getVariance__(varIdx, fileNames, mean))
 
     samples = np.asarray(samples)
 
@@ -152,10 +152,10 @@ if __name__ == "__main__":
             varInfo['mean'] = float(mean)
 
 
-            pos_std = getStd(i, pos_files, mean)
-            neg_std = getStd(i, neg_files, mean)
+            pos_var = getVariance(i, pos_files, mean)
+            neg_var = getVariance(i, neg_files, mean)
 
-            std = (pos_std + neg_std) / 2.
+            std = ( (pos_var + neg_var) / 2. ) ** 0.5
 
             varInfo['std'] = float(std)
 
@@ -165,7 +165,7 @@ if __name__ == "__main__":
             varInfo['mean'] = float(mean)
 
 
-            std = getStd(i, files, mean)
+            std = getVariance(i, files, mean) ** 0.5
 
             varInfo['std'] = float(std)     
 
