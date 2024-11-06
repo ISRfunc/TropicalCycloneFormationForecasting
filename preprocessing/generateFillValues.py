@@ -61,7 +61,7 @@ if __name__ == "__main__":
 
     config = load_config("./configs/configs.yml")
     
-    dataRoot = config['data']['root']
+    dataRoot = config['data']['rootRawData']
 
     w = os.walk(dataRoot)
 

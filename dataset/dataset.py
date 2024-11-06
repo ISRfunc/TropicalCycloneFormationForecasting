@@ -9,10 +9,10 @@ import torch
 
 
 class TropicalCycloneDataset(Dataset):
-    def __init__(self, files, dataRoot, transform = None, maxForecastTime = 36, fillOutlier = False):
+    def __init__(self, files, rawDataRoot, transforms = None, maxForecastTime = 36, fillOutlier = False):
         self.files = files
-        self.dataRoot = dataRoot
-        self.transform = transform
+        self.dataRoot = rawDataRoot
+        self.transforms = transforms
 
         # unit: hours
         self.maxForecastTime = maxForecastTime
@@ -29,6 +29,8 @@ class TropicalCycloneDataset(Dataset):
             
         usedVars = list(f.variables.keys())[:-4]
 
+        varList = []
+
         for varName in usedVars:
             var = f.variables[varName][:]
             data = var.data
@@ -40,10 +42,13 @@ class TropicalCycloneDataset(Dataset):
             else:
                 data[mask == True] = 0
 
-            varData = data
-            varDict[varName] = varData
+            varData = torch.Tensor(data)
+            if len(varData.size()) == 2:
+                varData = varData.unsqueeze(0)
+                
+            varList.append(varData)
 
-        return varDict
+        return varList
 
     def __len__(self):
         return len(self.files)
@@ -55,6 +60,10 @@ class TropicalCycloneDataset(Dataset):
 
         input_vars = self.__getDataFromFile__(fileName) 
 
-        transformed_input = self.transform(input_vars) if self.transform else input_vars
+        if self.transforms:
+            for i in range(len(input_vars)):
+                input_vars[i] = self.transforms[i](input_vars[i])    
 
-        return transformed_input, torch.as_tensor(label, dtype= torch.long)
+        varConcatTensor = torch.cat(input_vars, 0)
+
+        return varConcatTensor, torch.as_tensor(label, dtype= torch.long)

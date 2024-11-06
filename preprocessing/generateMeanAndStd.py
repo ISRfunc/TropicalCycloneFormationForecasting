@@ -8,6 +8,7 @@ from dataset.defineLabel import defineLabel
 import yaml
 
 varNames = None
+varIsoChannels = []
 
 
 def readDataFile(dataRoot, fileName):
@@ -18,7 +19,13 @@ def readDataFile(dataRoot, fileName):
     global varNames
     if varNames == None:
         varNames = usedVars
-
+    
+        for var in usedVars:
+            if len(f.variables[var][:].data.shape) == 3:
+                varIsoChannels.append(42)
+            else:
+                varIsoChannels.append(1)
+    
     return f, usedVars
 
 
@@ -60,7 +67,7 @@ def getMean(varIdx, fileNames, sampleIters = 10):
 
 
 
-def __getStd__(varIdx, fileNames):
+def __getStd__(varIdx, fileNames, mean):
 
     samples = np.asarray([])
 
@@ -79,15 +86,15 @@ def __getStd__(varIdx, fileNames):
 
         samples = np.concatenate([samples, varData])
 
-    return np.std(samples)
+    return np.mean((samples - mean) ** 2 )
 
 
-def getStd(varIdx, fileNames, sampleIters = 10):
+def getStd(varIdx, fileNames, mean, sampleIters = 10):
     
     samples = []
 
     for i in range(sampleIters):
-        samples.append(__getStd__(varIdx, fileNames))
+        samples.append(__getStd__(varIdx, fileNames, mean))
 
     samples = np.asarray(samples)
 
@@ -103,7 +110,7 @@ if __name__ == "__main__":
 
     config = load_config("./configs/configs.yml")
     
-    dataRoot = config['data']['root']
+    dataRoot = config['data']['rootRawData']
     maxForecastTime = config['data']['maxForecastTime']
     weighted_inputNorm = config['data']['weighted_inputNorm']
 
@@ -125,7 +132,7 @@ if __name__ == "__main__":
             else:
                 neg_files += [pth]
 
-    files = [pos_files] + [neg_files]
+    files = pos_files + neg_files
 
       
     varsInfo = {}
@@ -135,7 +142,7 @@ if __name__ == "__main__":
 
         print(i)
         varInfo = {}
-
+        
         if weighted_inputNorm:
             pos_mean = getMean(i, pos_files)
             neg_mean = getMean(i, neg_files)
@@ -145,8 +152,8 @@ if __name__ == "__main__":
             varInfo['mean'] = float(mean)
 
 
-            pos_std = getStd(i, pos_files)
-            neg_std = getStd(i, neg_files)
+            pos_std = getStd(i, pos_files, mean)
+            neg_std = getStd(i, neg_files, mean)
 
             std = (pos_std + neg_std) / 2.
 
@@ -158,11 +165,12 @@ if __name__ == "__main__":
             varInfo['mean'] = float(mean)
 
 
-            std = getStd(i, files)
+            std = getStd(i, files, mean)
 
             varInfo['std'] = float(std)     
 
 
+        varInfo['isoChannels'] = varIsoChannels[i]
         varsInfo[varNames[i]] = varInfo
         
 

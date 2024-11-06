@@ -15,12 +15,18 @@ conda env config vars set PYTHONPATH="/path/to/your/project"
 Chỉnh đường dẫn data trong file configs.yaml: 
 ```
 data:
-    root: "/path/to/your/data"
+    rootRawData: "/path/to/your/rawdata"
+    rootSplitData: "/path/to/your/maindata"
 ```
 
 Chạy thử code dataset: 
 ```
 python test.py
+```
+
+Chạy code split data thành các tập train, val, test:
+```
+python dataset/split.py
 ```
 
 Chạy code lấy mean và std của các giá trị cho mỗi biến bằng file generateMeanAndStd:
