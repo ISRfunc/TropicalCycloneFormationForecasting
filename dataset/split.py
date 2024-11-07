@@ -56,12 +56,12 @@ if __name__ == "__main__":
     valNegSize = int(len(neg_files) * valRatio // 10)
 
 
-    valSet = pos_files[trainPosSize:trainPosSize+valPosSize] + neg_files[trainPosSize:trainPosSize+valNegSize]
+    valSet = pos_files[trainPosSize:trainPosSize+valPosSize] + neg_files[trainNegSize:trainNegSize+valNegSize]
     random.shuffle(valSet)
 
 
 
-    testSet = pos_files[trainPosSize+valPosSize:] + neg_files[trainPosSize+valNegSize:]
+    testSet = pos_files[trainPosSize+valPosSize:] + neg_files[trainNegSize+valNegSize:]
     random.shuffle(testSet)
 
 
@@ -74,3 +74,6 @@ if __name__ == "__main__":
     save_data(rootSplitData, "val.txt", valSet)
 
     save_data(rootSplitData, "test.txt", testSet)
+
+
+    print(len(trainSet), len(valSet), len(testSet), len(pos_files), len(neg_files))

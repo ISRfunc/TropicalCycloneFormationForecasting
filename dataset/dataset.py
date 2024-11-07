@@ -64,4 +64,4 @@ class TropicalCycloneDataset(Dataset):
 
         varConcatTensor = torch.cat(input_vars, 0)
 
-        return varConcatTensor, torch.as_tensor(label, dtype= torch.long)
+        return varConcatTensor.unsqueeze(0), torch.as_tensor(label, dtype= torch.float)
