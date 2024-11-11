@@ -14,7 +14,7 @@ def read_data_list(data_path, file_name):
 
 if __name__ == "__main__":
 
-    config = load_config("./configs/configs.yml")
+    config = load_config("./configs/dataset_configs.yml")
     
     rootRawData = config['data']['rootRawData']
     rootSplitData = config['data']['rootSplitData']

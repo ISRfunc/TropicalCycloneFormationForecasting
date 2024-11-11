@@ -12,7 +12,7 @@ Cài đặt biến môi trường cho conda env:
 conda env config vars set PYTHONPATH="/path/to/your/project"
 ```
 
-Chỉnh đường dẫn data trong file configs.yaml: 
+Chỉnh đường dẫn data trong file dataset_configs.yaml: 
 ```
 data:
     rootRawData: "/path/to/your/rawdata"
@@ -37,4 +37,9 @@ python preprocessing/generateMeanAndStd.py
 Chạy code lấy outlier của các giá trị cho mỗi biến bằng file generateFillValues:
 ```
 python preprocessing/generateFillValues.py
+```
+
+Chạy code train model:
+```
+jupyter notebook train.ipynb
 ```
