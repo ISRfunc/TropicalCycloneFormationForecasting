@@ -7,9 +7,11 @@ from dataset.defineLabel import *
 from torch.utils.data import Dataset
 import torch
 
+from configs.configs_parser import load_config
+
 
 class TropicalCycloneDataset(Dataset):
-    def __init__(self, files, rawDataRoot, transforms = None, maxForecastTime = 36, fillOutlier = False):
+    def __init__(self, files, rawDataRoot, transforms = None, maxForecastTime = 36, fillMode = "outlier"):
         self.files = files
         self.dataRoot = rawDataRoot
         self.transforms = transforms
@@ -17,14 +19,16 @@ class TropicalCycloneDataset(Dataset):
         # unit: hours
         self.maxForecastTime = maxForecastTime
 
-        self.fillOutlier = fillOutlier
+        self.fillMode = fillMode
 
     def __getDataFromFile__(self, fileDir):
 
         f = netCDF4.Dataset(self.dataRoot + '/' + fileDir)
-        if self.fillOutlier:
+        if self.fillMode == "outlier":
             outlier_f = open("preprocessing/constants/outliers.txt", "r")
-            
+        elif self.fillMode == "mean":
+            mean_f = load_config("preprocessing/constants/meansAndStds.yml") 
+         
         usedVars = list(f.variables.keys())[:-4]
 
         varList = []
@@ -34,11 +38,13 @@ class TropicalCycloneDataset(Dataset):
             data = var.data
             mask = var.mask
 
-            if self.fillOutlier:
+            if self.fillMode == "outlier":
                 fillVal = float(outlier_f.readline().split('\n')[0])
                 data[mask == True] = fillVal
-            else:
+            elif self.fillMode == "zero":
                 data[mask == True] = 0
+            elif self.fillMode == "mean":
+                data[mask == True] = float(mean_f[varName]['mean'])
 
             varData = torch.Tensor(data)
             if len(varData.size()) == 2:

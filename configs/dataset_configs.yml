@@ -2,5 +2,5 @@ data:
   rootRawData: "/media/baok/New Volume/UET/Trí tuệ nhân tạo/DATA_TC/DATA"
   rootSplitData: "/media/baok/New Volume/UET/Trí tuệ nhân tạo/mainData"
   splitRatio: [8, 1, 1]
-  maxForecastTime: 36
+  maxForecastTime: 24
   weighted_inputNorm: True

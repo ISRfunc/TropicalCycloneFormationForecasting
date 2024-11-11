@@ -108,7 +108,7 @@ def getVariance(varIdx, fileNames, mean, sampleIters = 10):
 
 if __name__ == "__main__":
 
-    config = load_config("./configs/configs.yml")
+    config = load_config("./configs/dataset_configs.yml")
     
     dataRoot = config['data']['rootRawData']
     maxForecastTime = config['data']['maxForecastTime']

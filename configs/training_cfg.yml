@@ -1,0 +1,27 @@
+training:
+  # Dataloader's setting
+  num_workers: 8
+
+  model_arch: "arch1"
+  learning_rate: 0.0001 # The initial learning rate to use for training.
+
+  decision_boundary: 0.5
+  pos_weight: 0.56 # [4.5, 2.7, 1.17, 0.56]
+
+  epochs: 40
+  batch_size: 64
+
+  seed: 42
+
+  early_stopping: 3
+
+logging:
+  log_every_n_steps: 1
+  save_dir: "./results/te_fill/36h/" # save folder for logs, can be use with tensorboard later
+
+checkpoint:
+  # Save folder for model's checkpoint
+  save_dir: "./results/te_fill/36h/checkpoint"
+
+  # Save top k model:
+  k: 3

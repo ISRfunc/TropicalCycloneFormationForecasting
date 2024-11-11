@@ -59,7 +59,7 @@ def getFillValue(varIdx, fileNames, sampleIters = 10, binWidth = 3):
 
 if __name__ == "__main__":
 
-    config = load_config("./configs/configs.yml")
+    config = load_config("./configs/dataset_configs.yml")
     
     dataRoot = config['data']['rootRawData']
 

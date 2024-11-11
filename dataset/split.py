@@ -12,7 +12,7 @@ def save_data(save_path, file_name, data_list):
 
 if __name__ == "__main__":
 
-    config = load_config("./configs/configs.yml")
+    config = load_config("./configs/dataset_configs.yml")
     
     rootRawData = config['data']['rootRawData']
     rootSplitData = config['data']['rootSplitData']
@@ -44,16 +44,16 @@ if __name__ == "__main__":
 
     # split
 
-    trainPosSize = int(len(pos_files) * trainRatio // 10)
-    trainNegSize = int(len(neg_files) * trainRatio // 10)
+    trainPosSize = round(len(pos_files) * trainRatio / 10)
+    trainNegSize = round(len(neg_files) * trainRatio / 10)
 
     trainSet = pos_files[:trainPosSize] + neg_files[:trainNegSize]
     random.shuffle(trainSet)
 
 
 
-    valPosSize = int(len(pos_files) * valRatio // 10)
-    valNegSize = int(len(neg_files) * valRatio // 10)
+    valPosSize = round(len(pos_files) * valRatio / 10)
+    valNegSize = round(len(neg_files) * valRatio / 10)
 
 
     valSet = pos_files[trainPosSize:trainPosSize+valPosSize] + neg_files[trainNegSize:trainNegSize+valNegSize]
@@ -74,6 +74,3 @@ if __name__ == "__main__":
     save_data(rootSplitData, "val.txt", valSet)
 
     save_data(rootSplitData, "test.txt", testSet)
-
-
-    print(len(trainSet), len(valSet), len(testSet), len(pos_files), len(neg_files))

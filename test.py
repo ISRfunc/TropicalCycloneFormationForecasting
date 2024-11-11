@@ -31,7 +31,7 @@ if __name__ == "__main__":
     trainAugmenters = getTrainAugmenter(norm_Transformers)
 
     
-    ds = TropicalCycloneDataset(trainSet, rootRawData, transforms = trainAugmenters, maxForecastTime = maxForecastTime, fillOutlier = True)
+    ds = TropicalCycloneDataset(trainSet, rootRawData, transforms = trainAugmenters, maxForecastTime = maxForecastTime, fillMode = "mean")
     inp, lab = ds[0]
     print(inp.size())
     print(len(ds))
@@ -46,4 +46,4 @@ if __name__ == "__main__":
 
     train_dataloader = DataLoader(ds, batch_size=batch_size, shuffle=True,  num_workers= num_workers,  persistent_workers= pwt)
     train_features, train_labels = next(iter(train_dataloader))
-    print(train_features.size()) #torch.Size([2, 465, 33, 33])
+    print(train_features.size()) #torch.Size([2, 1, 465, 33, 33])
